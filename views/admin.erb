@@ -1,15 +1,51 @@
-<form class="" action="/admin" method="post">
-  <div class="form-group">
-    <label for="identifier">Identifier</label>
-    <input class="form-control" type="text" name="identifier">
+<div class="row">
+  <div class="col-md-6">
+    <h4>Active Trains</h4>
+    <ul>
+      <% @trains.each() do |train| %>
+        <li><%= train.identifier() %></li>
+      <% end %>
+    </ul>
   </div>
-  <div class="form-group">
-    <label for="driver">Driver</label>
-    <input class="form-control" type="text" name="driver">
+  <div class="col-md-6">
+    <form action="/add_train" method="post">
+      <div class="form-group">
+        <label for="identifier">Identifier</label>
+        <input class="form-control" type="text" name="identifier">
+      </div>
+      <div class="form-group">
+        <label for="driver">Driver</label>
+        <input class="form-control" type="text" name="driver">
+      </div>
+      <div class="form-group">
+        <label for="num_cars">Number of cars</label>
+        <input class="form-control" type="number" name="num_cars">
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" type="submit">Add Train</button>
+      </div>
+    </form>
   </div>
-  <div class="form-group">
-    <label for="num_cars">Number of cars</label>
-    <input class="form-control" type="number" name="num_cars">
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6">
+    <h4>Cities</h4>
+    <ul>
+      <% @cities.each() do |city| %>
+        <li><a href="/cities/<%= city.id() %>"><%= city.name() %></a></li>
+      <% end %>
+    </ul>
   </div>
-  <button class="form-control" type="submit">Submit</button>
-</form>
+  <div class="col-md-6">
+    <form action="/add_city" method="post">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input class="form-control" type="text" name="name">
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary" type="submit">Add City</button>
+      </div>
+    </form>
+  </div>
+</div>
