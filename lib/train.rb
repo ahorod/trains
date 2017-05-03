@@ -43,13 +43,25 @@ class Train
   end
 
   def update(attributes)
-    @identifier = attributes[:identifier]
-    @driver = attributes[:driver]
-    @num_cars = attributes[:num_cars].to_i()
     @id = self.id()
-    DB.exec("UPDATE trains SET identifier = '#{@identifier}' WHERE id = #{@id};")
-    DB.exec("UPDATE trains SET driver = '#{@driver}' WHERE id = #{@id};")
-    DB.exec("UPDATE trains SET num_cars = '#{@num_cars}' WHERE id = #{@id};")
+    attributes.each() do |key, value|
+      if value != nil
+        # instance_variable_set("@#{key}", value)
+        DB.exec("UPDATE trains SET #{key.to_s()} = '#{value}' WHERE id = #{@id};")
+      end
+    end
+    # if attributes[:identifier] != nil
+    #   @identifier = attributes[:identifier]
+    #   DB.exec("UPDATE trains SET identifier = '#{@identifier}' WHERE id = #{@id};")
+    # end
+    # if attributes[:driver] != nil
+    #   @driver = attributes[:driver]
+    #   DB.exec("UPDATE trains SET driver = '#{@driver}' WHERE id = #{@id};")
+    # end
+    # if attributes[:num_cars].to_i() != nil
+    #   @num_cars = attributes[:num_cars].to_i()
+    #   DB.exec("UPDATE trains SET num_cars = '#{@num_cars}' WHERE id = #{@id};")
+    # end
   end
 
   def delete

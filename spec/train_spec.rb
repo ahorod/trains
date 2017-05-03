@@ -39,6 +39,7 @@ describe(Train) do
       new_train = Train.new(:identifier => "GT99", :driver => "Brad", :num_cars => 2, :id => nil)
       new_train.save()
       new_train.update({:num_cars => 3})
+      expect(new_train.driver()).to eq("Brad")
       expect(new_train.num_cars()).to eq(3)
       new_train.update({:driver => "Jeff"})
       expect(new_train.driver()).to eq("Jeff")

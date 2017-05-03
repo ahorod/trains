@@ -3,7 +3,7 @@
     <h4>Active Trains</h4>
     <ul>
       <% @trains.each() do |train| %>
-        <li><%= train.identifier() %></li>
+        <li><a href="/trains/<%= train.id() %>"><%= train.identifier() %></a></li>
       <% end %>
     </ul>
   </div>
