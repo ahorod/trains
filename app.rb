@@ -11,6 +11,12 @@ DB = PG.connect({:dbname => "trains"})
 get('/') do
   @cities = City.all()
   @trains = Train.all()
+  erb(:index)
+end
+
+get('/admin') do
+  @cities = City.all()
+  @trains = Train.all()
   erb(:admin)
 end
 
@@ -34,13 +40,19 @@ post('/add_city') do
   erb(:admin)
 end
 
-get('/cities/:id') do
+get('/cities/admin/:id') do
   @city = City.find(params[:id].to_i())
   @trains = Train.all()
   erb(:city)
 end
 
-patch('/cities/:id') do
+get('/cities/:id') do
+  @city = City.find(params[:id].to_i())
+  @trains = Train.all()
+  erb(:city_user)
+end
+
+patch('/cities/admin/:id') do
   @city = City.find(params[:id].to_i())
   if params[:name] != ""
     name = params[:name]
@@ -54,7 +66,7 @@ patch('/cities/:id') do
   erb(:city)
 end
 
-delete('/cities/:id') do
+delete('/cities/admin/:id') do
   @city = City.find(params[:id].to_i())
   @city.delete()
   @cities = City.all()
@@ -62,13 +74,19 @@ delete('/cities/:id') do
   erb(:admin)
 end
 
-get('/trains/:id') do
+get('/trains/admin/:id') do
   @train = Train.find(params[:id].to_i())
   @cities = City.all()
   erb(:train)
 end
 
-patch('/trains/:id') do
+get('/trains/:id') do
+  @train = Train.find(params[:id].to_i())
+  @cities = City.all()
+  erb(:train_user)
+end
+
+patch('/trains/admin/:id') do
   @train = Train.find(params[:id].to_i())
   # key_array = ["driver", "num_cars", "identifier"]
   # params.each() do |key, value|
@@ -90,14 +108,15 @@ patch('/trains/:id') do
   end
   if params["city_ids"] != nil
     city_ids = params["city_ids"]
-    @train.update({:city_ids => city_ids})
+    arrival = params["train_arrival"]
+    @train.update({:city_ids => city_ids, :train_arrival => arrival})
   end
   @train = Train.find(params[:id].to_i())
   @cities = City.all()
   erb(:train)
 end
 
-delete('/trains/:id') do
+delete('/trains/admin/:id') do
   @train = Train.find(params[:id].to_i())
   @train.delete()
   @trains = Train.all()

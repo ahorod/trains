@@ -56,11 +56,13 @@ class City
     @name = attributes.fetch(:name, @name)
     @id = self.id()
     DB.exec("UPDATE cities SET name = '#{@name}' WHERE id = #{@id};")
-    attributes.fetch(:train_ids, []).each() do |train_id|
-      DB.exec("INSERT INTO stops (train_id, city_id) VALUES (#{train_id}, #{self.id()});")
+    if attributes[:train_ids] != nil
+      DB.exec("DELETE FROM stops WHERE city_id = #{@id};")
+      attributes.fetch(:train_ids, []).each() do |train_id|
+        DB.exec("INSERT INTO stops (train_id, city_id) VALUES (#{train_id}, #{self.id()});")
+      end
     end
   end
-
 
   def delete
     @id = self.id()

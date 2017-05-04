@@ -3,7 +3,7 @@
     <h4>Active Trains</h4>
     <ul>
       <% @trains.each() do |train| %>
-        <li><a href="/trains/<%= train.id() %>"><%= train.identifier() %></a></li>
+        <li><a href="/trains/admin/<%= train.id() %>"><%= train.identifier() %></a></li>
       <% end %>
     </ul>
   </div>
@@ -33,7 +33,7 @@
     <h4>Cities</h4>
     <ul>
       <% @cities.each() do |city| %>
-        <li><a href="/cities/<%= city.id() %>"><%= city.name() %></a></li>
+        <li><a href="/cities/admin/<%= city.id() %>"><%= city.name() %></a></li>
       <% end %>
     </ul>
   </div>

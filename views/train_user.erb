@@ -1,0 +1,14 @@
+<div class="col-md-6">
+  <h2>ID: <%= @train.identifier() %></h2>
+  <h4>Driver name: <%= @train.driver() %></h4>
+  <h4>Number of cars: <%= @train.num_cars() %></h4>
+  <br>
+  <% if @train.cities().any?() %>
+    <h4>The <i><%= @train.identifier() %></i> train stops in these cities:</h4>
+      <ul>
+        <%@train.cities().each() do |city|%>
+          <li><%= city.name()%></li>
+        <% end %>
+      </ul>
+  <% end %>
+</div>

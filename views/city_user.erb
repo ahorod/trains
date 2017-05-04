@@ -1,0 +1,12 @@
+<div class="col-md-6">
+  <h2><%= @city.name() %></h2>
+  <br>
+  <% if @city.trains().any?() %>
+    <h4>These trains are stopping at <i><%= @city.name() %></i>:</h4>
+    <ul>
+      <% @city.trains().each() do |train| %>
+        <li><%= train.identifier() %></li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

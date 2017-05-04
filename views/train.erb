@@ -1,9 +1,10 @@
 <div class="col-md-6">
-  <h2><%= @train.identifier() %></h2>
-  <h4><%= @train.driver() %></h4>
-  <h4><%= @train.num_cars() %></h4>
+  <h2>ID: <%= @train.identifier() %></h2>
+  <h4>Driver name: <%= @train.driver() %></h4>
+  <h4>Number of cars: <%= @train.num_cars() %></h4>
+  <br>
   <% if @train.cities().any?() %>
-    <h4>The train stops in those cities:</h4>
+    <h4>The <i><%= @train.identifier() %></i> train stops in these cities:</h4>
       <ul>
         <%@train.cities().each() do |city|%>
           <li><%= city.name()%></li>
@@ -12,7 +13,7 @@
   <% end %>
 </div>
 <div class="col-md-6">
-  <form action="/trains/<%= @train.id() %>" method="post">
+  <form action="/trains/admin/<%= @train.id() %>" method="post">
     <input name="_method" type="hidden" value="patch">
     <div class="form-group">
       <label for="identifier">identifier</label>
@@ -26,6 +27,7 @@
       <label for="num_cars">Number of cars</label>
       <input class="form-control" type="number" name="num_cars">
     </div>
+    <h4>Cities</i></h4>
     <% @cities.each() do |city| %>
       <div class="checkbox">
         <label>
@@ -37,7 +39,8 @@
       <button class="btn btn-primary" type="submit">Update Train</button>
     </div>
   </form>
-  <form class="float" action="/trains/<%= @train.id() %>" method="post">
+  <br>
+  <form class="float" action="/trains/admin/<%= @train.id() %>" method="post">
     <input name="_method" type="hidden" value="delete">
     <div class="btn-group float">
       <button class="btn btn-primary" type="submit">Delete Train</button>

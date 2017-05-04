@@ -62,13 +62,12 @@ class Train
         DB.exec("UPDATE trains SET #{key.to_s()} = '#{value}' WHERE id = #{@id};")
       end
     end
-    attributes.fetch(:city_ids, []).each() do |city_id|
-      DB.exec("INSERT INTO stops (city_id, train_id) VALUES (#{city_id}, #{self.id()});")
+    if attributes[:city_ids] != nil
+      DB.exec("DELETE FROM stops WHERE train_id = #{@id};")
+      attributes.fetch(:city_ids, []).each() do |city_id|
+        DB.exec("INSERT INTO stops (city_id, train_id) VALUES (#{city_id}, #{self.id()});")
+      end
     end
-    # if attributes[:identifier] != nil
-    #   @identifier = attributes[:identifier]
-    #   DB.exec("UPDATE trains SET identifier = '#{@identifier}' WHERE id = #{@id};")
-    # end
   end
 
   def delete

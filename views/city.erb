@@ -3,7 +3,7 @@
     <h2><%= @city.name() %></h2>
     <br>
     <% if @city.trains().any?() %>
-      <h4>These trains are stopping at <i><%= @city.name() %></i></h4>
+      <h4>These trains are stopping at <i><%= @city.name() %></i>:</h4>
       <ul>
         <% @city.trains().each() do |train| %>
           <li><%= train.identifier() %></li>
@@ -12,12 +12,13 @@
     <% end %>
   </div>
   <div class="col-md-6">
-    <form action="/cities/<%= @city.id() %>" method="post">
+    <form action="/cities/admin/<%= @city.id() %>" method="post">
       <input name="_method" type="hidden" value="patch">
       <div class="form-group">
         <label for="name">Name</label>
         <input class="form-control" type="text" name="name">
       </div>
+      <h4>Trains</i></h4>
       <% @trains.each() do |train| %>
         <div class="checkbox">
           <label>
@@ -29,6 +30,7 @@
         <button class="btn btn-primary" type="submit">Update City</button>
       </div>
     </form>
+    <br>
     <form class="float" action="/cities/<%= @city.id() %>" method="post">
       <input name="_method" type="hidden" value="delete">
       <div class="btn-group float">
