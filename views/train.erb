@@ -2,6 +2,14 @@
   <h2><%= @train.identifier() %></h2>
   <h4><%= @train.driver() %></h4>
   <h4><%= @train.num_cars() %></h4>
+  <% if @train.cities().any?() %>
+    <h4>The train stops in those cities:</h4>
+      <ul>
+        <%@train.cities().each() do |city|%>
+          <li><%= city.name()%></li>
+        <% end %>
+      </ul>
+  <% end %>
 </div>
 <div class="col-md-6">
   <form action="/trains/<%= @train.id() %>" method="post">
@@ -18,6 +26,13 @@
       <label for="num_cars">Number of cars</label>
       <input class="form-control" type="number" name="num_cars">
     </div>
+    <% @cities.each() do |city| %>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="city_ids[]" value="<%= city.id() %>"><%= city.name()%>
+        </label>
+      </div>
+    <% end %>
     <div class="btn-group">
       <button class="btn btn-primary" type="submit">Update Train</button>
     </div>

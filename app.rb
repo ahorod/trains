@@ -17,7 +17,7 @@ end
 post('/add_train') do
   identifier = params[:identifier]
   driver = params[:driver]
-  num_cars = params[:num_cars]
+  num_cars = params[:num_cars].to_i()
   new_train = Train.new({:identifier => identifier, :driver => driver, :num_cars => num_cars})
   new_train.save()
   @cities = City.all()
@@ -36,13 +36,21 @@ end
 
 get('/cities/:id') do
   @city = City.find(params[:id].to_i())
+  @trains = Train.all()
   erb(:city)
 end
 
 patch('/cities/:id') do
-  name = params[:name]
   @city = City.find(params[:id].to_i())
-  @city.update({:name => name})
+  if params[:name] != ""
+    name = params[:name]
+    @city.update({:name => name})
+  end
+  if params["train_ids"] != nil
+    train_ids = params["train_ids"]
+    @city.update({:train_ids => train_ids})
+  end
+  @trains = Train.all()
   erb(:city)
 end
 
@@ -56,27 +64,36 @@ end
 
 get('/trains/:id') do
   @train = Train.find(params[:id].to_i())
+  @cities = City.all()
   erb(:train)
 end
 
 patch('/trains/:id') do
-  train = Train.find(params[:id].to_i())
-  params.each() do |key, value|
-    train.update({key => value})
-  end
-  # if params[:identifier] != ''
-  #   identifier = params[:identifier]
-  #   train.update({:identifier => identifier})
-  # end
-  # if params[:driver] != ''
-  #   driver = params[:driver]
-  #   train.update({:driver => driver})
-  # end
-  # if params[:num_cars] != ''
-  #   num_cars = params[:num_cars]
-  #   train.update({:num_cars => num_cars})
-  # end
   @train = Train.find(params[:id].to_i())
+  # key_array = ["driver", "num_cars", "identifier"]
+  # params.each() do |key, value|
+  #   if key_array.include?(params[key])
+  #     train.update({key => value})
+  #   end
+  # end
+  if params[:identifier] != ''
+    identifier = params[:identifier]
+    @train.update({:identifier => identifier})
+  end
+  if params[:driver] != ''
+    driver = params[:driver]
+    @train.update({:driver => driver})
+  end
+  if params[:num_cars] != ''
+    num_cars = params[:num_cars]
+    @train.update({:num_cars => num_cars})
+  end
+  if params["city_ids"] != nil
+    city_ids = params["city_ids"]
+    @train.update({:city_ids => city_ids})
+  end
+  @train = Train.find(params[:id].to_i())
+  @cities = City.all()
   erb(:train)
 end
 

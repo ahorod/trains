@@ -38,15 +38,34 @@ class City
     return found_city
   end
 
+  def trains
+    stops = []
+    results = DB.exec("SELECT train_id FROM stops WHERE city_id = #{self.id()};")
+    results.each() do |result|
+      train_id = result["train_id"].to_i()
+      train = DB.exec("SELECT * FROM trains WHERE id = #{train_id};")
+      identifier = train.first()["identifier"]
+      driver = train.first()["driver"]
+      num_cars = train.first()["num_cars"]
+      stops.push(Train.new({:identifier => identifier, :driver => driver, :num_cars => num_cars, :id => train_id}))
+    end
+    return stops
+  end
+
   def update(attributes)
-    @name = attributes[:name]
+    @name = attributes.fetch(:name, @name)
     @id = self.id()
     DB.exec("UPDATE cities SET name = '#{@name}' WHERE id = #{@id};")
+    attributes.fetch(:train_ids, []).each() do |train_id|
+      DB.exec("INSERT INTO stops (train_id, city_id) VALUES (#{train_id}, #{self.id()});")
+    end
   end
+
 
   def delete
     @id = self.id()
-    DB.exec("DELETE FROM cities WHERE id = #{@id}")
+    DB.exec("DELETE FROM cities WHERE id = #{@id};")
+    DB.exec("DELETE FROM stops WHERE city_id = #{@id};")
   end
 
 end

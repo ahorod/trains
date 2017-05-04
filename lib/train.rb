@@ -42,31 +42,39 @@ class Train
     return found_train
   end
 
+  def cities
+    stops = []
+    results = DB.exec("SELECT city_id FROM stops WHERE train_id = #{self.id()};")
+    results.each() do |result|
+      city_id = result["city_id"].to_i()
+      city = DB.exec("SELECT * FROM cities WHERE id = #{city_id};")
+      name = city.first()["name"]
+      stops.push(City.new({:name => name, :id => city_id}))
+    end
+    return stops
+  end
+
   def update(attributes)
     @id = self.id()
     attributes.each() do |key, value|
-      if value != nil
-        # instance_variable_set("@#{key}", value)
+      if value != nil && key != :city_ids
+        instance_variable_set("@#{key}", value)
         DB.exec("UPDATE trains SET #{key.to_s()} = '#{value}' WHERE id = #{@id};")
       end
+    end
+    attributes.fetch(:city_ids, []).each() do |city_id|
+      DB.exec("INSERT INTO stops (city_id, train_id) VALUES (#{city_id}, #{self.id()});")
     end
     # if attributes[:identifier] != nil
     #   @identifier = attributes[:identifier]
     #   DB.exec("UPDATE trains SET identifier = '#{@identifier}' WHERE id = #{@id};")
     # end
-    # if attributes[:driver] != nil
-    #   @driver = attributes[:driver]
-    #   DB.exec("UPDATE trains SET driver = '#{@driver}' WHERE id = #{@id};")
-    # end
-    # if attributes[:num_cars].to_i() != nil
-    #   @num_cars = attributes[:num_cars].to_i()
-    #   DB.exec("UPDATE trains SET num_cars = '#{@num_cars}' WHERE id = #{@id};")
-    # end
   end
 
   def delete
     @id = self.id()
-    DB.exec("DELETE FROM trains WHERE id = #{@id}")
+    DB.exec("DELETE FROM trains WHERE id = #{@id};")
+    DB.exec("DELETE FROM stops WHERE train_id = #{@id};")
   end
 
 end

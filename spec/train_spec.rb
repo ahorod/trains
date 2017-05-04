@@ -39,12 +39,20 @@ describe(Train) do
       new_train = Train.new(:identifier => "GT99", :driver => "Brad", :num_cars => 2, :id => nil)
       new_train.save()
       new_train.update({:num_cars => 3})
-      expect(new_train.driver()).to eq("Brad")
       expect(new_train.num_cars()).to eq(3)
+      expect(new_train.driver()).to eq("Brad")
       new_train.update({:driver => "Jeff"})
       expect(new_train.driver()).to eq("Jeff")
       new_train.update({:identifier => "ZX44"})
       expect(new_train.identifier()).to eq("ZX44")
+    end
+    it('lets you add a city(ies) to a train') do
+      new_train = Train.new(:identifier => "GT99", :driver => "Brad", :num_cars => 2, :id => nil)
+      new_train.save()
+      new_city = City.new(:name => "NY", :id => nil)
+      new_city.save()
+      new_train.update({:city_ids => [new_city.id()]})
+      expect(new_train.cities()).to eq([new_city])
     end
   end
 
